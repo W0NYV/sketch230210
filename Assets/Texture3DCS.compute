@@ -1,0 +1,17 @@
+#pragma kernel CreateTex3D
+
+#include "./ValueNoise4D.cginc"
+
+RWTexture3D<float4> _TextureBuffer;
+
+float4 _Time;
+
+//1スレッド、64カーネル
+[numthreads(4, 4, 4)]
+void CreateTex3D (uint3 id : SV_DispatchThreadID)
+{
+
+    float v = valueNoise(float4((float)id.x, (float)id.y, (float)id.z, _Time.y * 1.0));
+
+    _TextureBuffer[id.xyz] = float4(v, v, v, 1.0);
+}
